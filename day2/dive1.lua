@@ -1,12 +1,13 @@
-X = 0
-Y = 0
+X, Y = 0, 0
 
-local file = io.open("input", "r")
-local input = file:read("*all")
+-- open input file
+local input = io.open("input", "r"):read("*all")
+
+-- replace directions with instructions
 input = input:gsub("forward", "X = X +")
 input = input:gsub("down", "Y = Y +")
 input = input:gsub("up", "Y = Y -")
 
+-- do instructions and print result
 load(input)()
-
 print(X * Y)
