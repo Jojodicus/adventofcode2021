@@ -1,5 +1,6 @@
 from textwrap import wrap
 
+# all numbers drawn in current game
 drawn: list[int] = list()
 
 # filter numbers already drawn
