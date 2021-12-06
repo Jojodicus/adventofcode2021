@@ -2,7 +2,7 @@ EXE = lanternfish
 SRC = lanternfish
 
 CC = g++
-CFLAGS = -std=c++20 -Wall -Wextra -pedantic -o3
+CFLAGS = -std=c++17 -Wall -Wextra -pedantic -o3
 
 all: $(EXE)
 
