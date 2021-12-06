@@ -2,85 +2,69 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
-#include <vector>
 #include <list>
-#include <bits/stdc++.h>
 
-#include <chrono>
-
-// TODO: includes
 namespace constants
 {
     static const std::string DELIMITER = ",";
-    static constexpr int NEW_FISH_COOLDOWN = 8;
-    static constexpr int OLD_FISH_COOLDOWN = 6;
     static constexpr int SIMULATION_STEPS_1 = 80;
     static constexpr int SIMULATION_STEPS_2 = 256;
 }
 
-static std::list<int> parse_input(std::string text);
-static std::size_t puzzle_one(std::list<int> input);
-static std::size_t puzzle_two(std::list<int> input);
-static std::list<int> simulate_once(std::list<int> fish);
-
-static void print_list(std::list<int> l); // TODO: remove
-
-static std::size_t puzzle_one(std::list<int> input)
+static std::uint_fast64_t *simulate_once(std::uint_fast64_t buckets[])
 {
-    // simulate constants::SIMULATION_STEPS_1 times
-    for (int i = 0; i < constants::SIMULATION_STEPS_1; i++)
+    // initialize new buckets
+    std::uint_fast64_t *new_buckets = new std::uint_fast64_t[9];
+    for (int i = 0; i < 9; i++)
     {
-        input = simulate_once(input);
+        new_buckets[i] = 0;
     }
 
-    return input.size();
+    // spawn
+    new_buckets[8] += buckets[0];
+    new_buckets[6] += buckets[0];
+    // mature or regenerate
+    for (int i = 1; i < 9; i++)
+    {
+        new_buckets[i - 1] += buckets[i];
+    }
+
+    // free and return
+    delete[] buckets;
+    return new_buckets;
 }
 
-static std::size_t puzzle_two(std::list<int> input)
+static std::size_t simulate_steps(std::list<int> input, int steps)
 {
-    // simulate constants::SIMULATION_STEPS_2 times
-    for (int i = 0; i < constants::SIMULATION_STEPS_2; i++)
+    // initialize buckets
+    std::size_t *buckets = new std::size_t[9];
+    for (int i = 0; i < 9; i++)
     {
-        input = simulate_once(input);
-    }
-    std::cout << std::endl;
-
-    return input.size();
-}
-
-static std::list<int> simulate_once(std::list<int> fish)
-{
-    std::list<int> spawn;
-    uint_fast32_t c = 0;
-
-    // loop over fish
-    for (auto f : fish)
-    {
-        f--;
-        if (f < 0) // spawning
-        {
-            f = constants::OLD_FISH_COOLDOWN;
-            c++; // hehehe
-        }
-        spawn.push_back(f);
+        buckets[i] = 0;
     }
 
-    // add spawn
-    for (; c > 0; c--)
+    // fill with starting values
+    for (auto n : input)
     {
-        spawn.push_back(constants::NEW_FISH_COOLDOWN);
+        buckets[n]++;
     }
 
-    return spawn;
-}
-
-static void print_list(std::list<int> l) // TODO: remove
-{
-    for (auto e : l)
+    // simulate
+    for (int i = 0; i < steps; i++)
     {
-        std::cout << e << ", ";
+        buckets = simulate_once(buckets);
     }
-    std::cout << std::endl;
+
+    // sum all fish in each bucket
+    std::size_t result = 0;
+    for (int i = 0; i < 9; i++)
+    {
+        result += buckets[i];
+    }
+
+    // free and return
+    delete[] buckets;
+    return result;
 }
 
 // "1,3,3,7" -> [1,3,3,7]
@@ -88,21 +72,22 @@ static std::list<int> parse_input(std::string text)
 {
     std::list<int> res;
 
-    // yes this accepts more than one digit
-    std::size_t start = 0;
-    std::size_t end = text.find(constants::DELIMITER);
-
-    while (end != -1)
+    for (std::size_t i = 0; i < text.length() - 1; i += 2)
     {
-        res.push_back(std::stoi(text.substr(start, end - start)));
-
-        start = end + constants::DELIMITER.size();
-        end = text.find(constants::DELIMITER, start);
+        res.push_back(text.at(i) - '0');
     }
-    // last number
-    res.push_back(std::stoi(text.substr(start, end - start)));
 
     return res;
+}
+
+static std::size_t puzzle_one(std::list<int> input)
+{
+    return simulate_steps(input, constants::SIMULATION_STEPS_1);
+}
+
+static std::size_t puzzle_two(std::list<int> input)
+{
+    return simulate_steps(input, constants::SIMULATION_STEPS_2);
 }
 
 int main(void)
@@ -113,18 +98,10 @@ int main(void)
                       std::istreambuf_iterator<char>());
     file.close();
 
+    // parse
     auto parsed = parse_input(input);
 
-//     using std::chrono::high_resolution_clock;
-//     using std::chrono::duration_cast;
-//     using std::chrono::duration;
-//     using std::chrono::microseconds;
-//     auto t1 = high_resolution_clock::now();
-//     long_operation();
-//     auto t2 = high_resolution_clock::now();
-//     duration<double, std::micro> us_double = t2 - t1;
-//     std::cout << us_double.count() << "ms";
-
+    // calculate
     std::cout << puzzle_one(parsed) << std::endl;
     std::cout << puzzle_two(parsed) << std::endl;
 

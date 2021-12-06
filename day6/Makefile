@@ -15,7 +15,7 @@ run: all
 $(EXE): $(SRC).o
 	$(CC) $(CFLAGS) -o $@ $<
 
-%.o: %.c
+%.o: %.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 .PHONY: all, clean, run
