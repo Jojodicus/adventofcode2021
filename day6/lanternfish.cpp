@@ -5,7 +5,6 @@
 
 namespace constants
 {
-    static const std::string DELIMITER = ",";
     static constexpr int SIMULATION_STEPS_1 = 80;
     static constexpr int SIMULATION_STEPS_2 = 256;
 }
