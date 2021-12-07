@@ -10,3 +10,4 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 4 | [Giant Squid](https://adventofcode.com/2021/day/4) | Python |
 | 5 | [Hydrothermal Venture](https://adventofcode.com/2021/day/5) | Java |
 | 6 | [Lanternfish](https://adventofcode.com/2021/day/6) | C++ |
+| 7 | [The Treachery of Whales](https://adventofcode.com/2021/day/7) | Scala |
