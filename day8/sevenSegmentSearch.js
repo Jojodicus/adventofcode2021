@@ -205,9 +205,7 @@ function decode(data) {
         }
     }
     
-
-    console.log(coded);
-    console.log(result);
+    
     return result;
 }
 
