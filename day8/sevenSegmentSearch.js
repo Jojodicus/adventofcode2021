@@ -31,7 +31,18 @@ function puzzleOne(data) {
 }
 
 function puzzleTwo(data) {
-    return "TODO";
+    let result = 0;
+
+    for (let i = 0; i < data.length; i++) {
+        result += decode(data[i]);
+    }
+
+    return result;
+}
+
+function decode(data) {
+    // todo
+    return 42;
 }
 
 function solve(input) {
@@ -43,4 +54,5 @@ function solve(input) {
     }
 
     document.getElementById("p1").innerHTML += puzzleOne(data);
+    document.getElementById("p2").innerHTML += puzzleTwo(data);
 }
