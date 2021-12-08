@@ -3,10 +3,10 @@
 #include <string>
 #include <list>
 
-namespace constants
+namespace
 {
-    static constexpr int SIMULATION_STEPS_1 = 80;
-    static constexpr int SIMULATION_STEPS_2 = 256;
+    constexpr int SIMULATION_STEPS_1 = 80;
+    constexpr int SIMULATION_STEPS_2 = 256;
 }
 
 static std::uint_fast64_t *simulate_once(std::uint_fast64_t buckets[])
@@ -80,12 +80,12 @@ static std::list<int> parse_input(std::string text)
 
 static std::size_t puzzle_one(std::list<int> input)
 {
-    return simulate_steps(input, constants::SIMULATION_STEPS_1);
+    return simulate_steps(input, SIMULATION_STEPS_1);
 }
 
 static std::size_t puzzle_two(std::list<int> input)
 {
-    return simulate_steps(input, constants::SIMULATION_STEPS_2);
+    return simulate_steps(input, SIMULATION_STEPS_2);
 }
 
 int main(void)
