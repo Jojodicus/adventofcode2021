@@ -12,3 +12,4 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 6 | [Lanternfish](https://adventofcode.com/2021/day/6) | C++ |
 | 7 | [The Treachery of Whales](https://adventofcode.com/2021/day/7) | Scala |
 | 8 | [Seven Segment Search](https://adventofcode.com/2021/day/8) | JS |
+| 9 | [Smoke Basin](https://adventofcode.com/2021/day/9) | C# |
