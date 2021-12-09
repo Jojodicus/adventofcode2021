@@ -33,10 +33,9 @@ function puzzleOne(data) {
 function puzzleTwo(data) {
     let result = 0;
 
-    decode(data[0]);
-    // for (let i = 0; i < data.length; i++) {
-    //     result += decode(data[i]);
-    // }
+    for (let i = 0; i < data.length; i++) {
+        result += decode(data[i]);
+    }
 
     return result;
 }
@@ -65,8 +64,6 @@ function decode(data) {
                 break;
         }
     }
-
-    console.log(coded);
 
     // segment a
     // 1 and 7 -> a
@@ -154,10 +151,62 @@ function decode(data) {
         coded[6] = curr;
     }
 
-    console.log(segments);
+    // number 2
+    // length 5 and e -> 2
+    for (let i = 0; i < input.length; i++) {
+        var curr = input[i];
 
-    // todo
-    return 42;
+        if (curr.length == 5 && curr.includes(segments[4])) {
+            coded[2] = curr;
+            break;
+        }
+    }
+
+    // number 3
+    // length 5 and contains 1
+    for (let i = 0; i < input.length; i++) {
+        var curr = input[i];
+
+        if (curr.length == 5 && curr.includes(coded[1].charAt(0)) && curr.includes(coded[1].charAt(1))) {
+            coded[3] = curr;
+            break;
+        }
+    }
+
+    // number 5
+    // final number
+    for (let i = 0; i < input.length; i++) {
+        var curr = input[i];
+
+        if (curr.length == 5 && curr != coded[3] && curr != coded[2]) {
+            coded[5] = curr;
+            break;
+        }
+    }
+
+    // prepare coded digits
+    for (let i = 0; i < coded.length; i++) {
+        coded[i] = coded[i].split("").sort().join("");
+    }
+
+    
+    // decode result
+    let result = 0;
+    let output = data[1];
+    for (let i = 0; i < output.length; i++) {
+        result *= 10;
+        var curr = output[i].split("").sort().join("");
+
+        for (let j = 0; j < coded.length; j++) {
+            if (curr == coded[j]) {
+                result += j;
+                break;
+            }
+        }
+    }
+    
+    
+    return result;
 }
 
 function solve(input) {
@@ -168,6 +217,6 @@ function solve(input) {
         data[i][1] = data[i][1].split(" ");
     }
 
-    document.getElementById("p1").innerHTML += puzzleOne(data);
-    document.getElementById("p2").innerHTML += puzzleTwo(data);
+    document.getElementById("p1r").innerHTML = puzzleOne(data);
+    document.getElementById("p2r").innerHTML = puzzleTwo(data);
 }
