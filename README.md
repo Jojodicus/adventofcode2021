@@ -14,3 +14,4 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 8 | [Seven Segment Search](https://adventofcode.com/2021/day/8) | JS |
 | 9 | [Smoke Basin](https://adventofcode.com/2021/day/9) | C# |
 | 10 | [Syntax Scoring](https://adventofcode.com/2021/day/10) | Ruby |
+| 11 | [Dumbo Octopus](https://adventofcode.com/2021/day/11) | Java |
