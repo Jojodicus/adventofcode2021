@@ -1,22 +1,15 @@
-from bidict import bidict
-import numpy as np
-
-names: bidict = bidict()
-edges: list(list()) = None
+edges: list[list[int]] = None
 visited: set = set()
 visitedTwice = None
 
-n2i: dict() = {}
-i2n: dict() = {}
+# name -> indes and vice versa
+n2i: dict[str, int] = {}
+i2n: dict[int, str] = {}
 
 def puzzleOne() -> int:
-    global visited
-    visited = [0] * len(n2i)
     return p1helper(n2i["start"])
 
 def puzzleTwo() -> int:
-    global visited
-    visited = [0] * len(n2i)
     return p2helper(n2i["start"])
 
 def p1helper(current: int) -> int:
@@ -27,36 +20,36 @@ def p1helper(current: int) -> int:
     total = 0
     for i, v in enumerate(edges[current]):
         # extensions
-        if v == 0 or i2n[i] == "start" or visited[i] == 1:
+        if v == 0 or i2n[i] == "start" or i in visited:
             continue
 
         # apply
         if i2n[i].islower():
-            visited[i] = 1
+            visited.add(i)
 
         # backtrack
         total += p1helper(i)
 
         # revert
-        if i2n[i].islower():
-            visited[i] = 0
+        visited.discard(i)
     
     return total
 
 def p2helper(current: int) -> int:
     global visitedTwice
 
+    # final
     if i2n[current] == "end":
         #print([i2n[i] for i in trace])
         return 1
 
-    if visited[current] == 1:
-        if visitedTwice != None:
-            return 0
-        visitedTwice = current
-
+    # apply
     if i2n[current].islower():
-        visited[current] = 1
+        if current in visited:
+            if visitedTwice != None:
+                return 0
+            visitedTwice = current
+        visited.add(current)
 
     total = 0
     for i, v in enumerate(edges[current]):
@@ -67,10 +60,11 @@ def p2helper(current: int) -> int:
         # backtrack
         total += p2helper(i)
     
+    # revert
     if visitedTwice == current:
         visitedTwice = None
     else:
-        visited[current] = 0
+        visited.discard(current)
 
     return total
 
