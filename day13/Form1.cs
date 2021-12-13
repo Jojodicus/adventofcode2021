@@ -69,7 +69,7 @@ namespace aoc13
             // positions to add into holding array
             List<int[]> marked = new();
 
-            foreach (var pos in positions)
+            foreach (string pos in positions)
             {
                 var p = pos.Split(',');
                 var x = int.Parse(p[0]);
@@ -87,7 +87,7 @@ namespace aoc13
             fillArray(origami);
 
             // fill contents
-            foreach (var mark in marked)
+            foreach (int[] mark in marked)
             {
                 origami[mark[1], mark[0]] = '#';
             }
@@ -168,7 +168,7 @@ namespace aoc13
             if (direction == 'y')
             {
                 var newOrigami = new char[position, origami.GetLength(1)];
-                
+
                 // copy old data
                 for (int i = 0; i < position; i++)
                 {
@@ -177,7 +177,7 @@ namespace aoc13
                         newOrigami[i, j] = origami[i, j];
                     }
                 }
-                
+
                 // fold
                 for (int i = position + 1; i < origami.GetLength(0); i++)
                 {
