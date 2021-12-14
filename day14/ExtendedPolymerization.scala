@@ -2,17 +2,33 @@ import scala.io.Source
 
 object ExtendedPolymerization {
 
-  def puzzleOne(start: Array[Long], transitions: Map[Int, (Int, Int)], map: List[(String, Int)]): Long = {
-    // step 10 times
-    val res = 1.to(10).foldLeft(start)((arr, _) => step(arr, transitions))
+  // step 10 times
+  def puzzleOne(start: Array[Long], transitions: Map[Int, (Int, Int)], map: List[(String, Int)]): Long =
+    stepN(start, transitions, map, 10)
 
-    // count: TODO
+  // step 40 times
+  def puzzleTwo(start: Array[Long], transitions: Map[Int, (Int, Int)], map: List[(String, Int)]): Long =
+    stepN(start, transitions, map, 40)
 
-    println("res : " + res.toList)
-    res.sum
+  def stepN(start: Array[Long], transitions: Map[Int, (Int, Int)], map: List[(String, Int)], steps: Int): Long = {
+    // step n times
+    val res = 1.to(steps).foldLeft(start)((arr, _) => step(arr, transitions))
+
+    // count (unsure why this gave wrong results with fold)
+    var total: Map[Char, Long] = Map()
+    for (i <- 0 until start.length) {
+      val phrase = findValue(map, i)
+
+      // add
+      total += (phrase(0) -> (total.getOrElse[Long](phrase(0), 0) + res(i)))
+      total += (phrase(1) -> (total.getOrElse[Long](phrase(1), 0) + res(i)))
+    }
+    // remove overlap
+    val actual: List[Long] = total.toList.map(_._2 + 1 >> 1)
+
+    // filter
+    actual.max - actual.min
   }
-
-  def puzzleTwo(): Int = ??? //TODO
 
   def step(before: Array[Long], transitions: Map[Int, (Int, Int)]): Array[Long] = {
     val newArr = new Array[Long](before.length)
@@ -78,9 +94,7 @@ object ExtendedPolymerization {
     val transition = parseTransitions(data, map)
 
     // calculate
-    println(map.toList)
-    println(transition.toList)
-
-    println(puzzleOne(start, transition, map))
+    println(s"puzzle 1: ${puzzleOne(start, transition, map)}")
+    println(s"puzzle 2: ${puzzleTwo(start, transition, map)}")
   }
 }
