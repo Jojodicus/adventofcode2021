@@ -18,3 +18,4 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 12 | [Passage Pathing](https://adventofcode.com/2021/day/11) | Python |
 | 13 | [Transparent Origami](https://adventofcode.com/2021/day/13) | C# |
 | 14 | [Extended Polymerization](https://adventofcode.com/2021/day/14) | Scala |
+| 15 | [Chiton](https://adventofcode.com/2021/day/15) | Java |
