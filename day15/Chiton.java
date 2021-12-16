@@ -1,109 +1,114 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Chiton {
-    private static Vertex start;
-    private static Vertex end;
-    private static int startValue;
-    private static int endValue;
-
-    private static int puzzleOne(Graph data) {
-        DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(data);
-        dijkstraAlgorithm.execute(start);
-        return dijkstraAlgorithm.getShortestDistance(end) - startValue + endValue;
+    // sortable positions used for heap
+    private static record Position(int x, int y, int weight) implements Comparable<Position> {
+        @Override
+        public int compareTo(Position p) {
+            return weight - p.weight;
+        }
     }
 
-    // takes VERY long to finish
-    private static int puzzleTwo(String file) {
-        String[] aaa = file.split("\r\n");
+    private static int puzzleOne(int[][] field) {
+        int[][] risk = new int[field.length][field.length];
+        for (int[] ints : risk) {
+            Arrays.fill(ints, Integer.MAX_VALUE);
+        }
 
-        Graph g;
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int bigRow = 0; bigRow < 5; bigRow++) {
-                for (String cRow : aaa) {
-                    for (int bigCol = 0; bigCol < 5; bigCol++) {
-                        for (int col = 0; col < aaa.length; col++) {
-                            int cur = cRow.charAt(col) - '1';
+        risk[0][0] = 0;
 
-                            // maximum pain
-                            int newC = ((cur + bigRow + bigCol) % 9) + 1;
-                            sb.append(newC + '1');
-                        }
-                    }
-                    sb.append("\r\n");
+        // breadth first search - dijkstra //
+
+        PriorityQueue<Position> heapQueue = new PriorityQueue<>();
+        heapQueue.add(new Position(0, 0, 0));
+
+        while (heapQueue.size() != 0) {
+            Position current = heapQueue.poll();
+
+            // reached end
+            if (current.x == field.length && current.y == field.length)
+                break;
+
+            // next positions to visit
+            int[][] next = new int[][]{
+                    {current.x + 1, current.y},
+                    {current.x, current.y + 1},
+                    {current.x - 1, current.y},
+                    {current.x, current.y - 1}
+            };
+
+            for (int[] newPos : next) {
+                int newRow = newPos[0];
+                int newCol = newPos[1];
+
+                // outside of grid
+                if (newRow < 0 || newCol < 0 || newRow >= field.length || newCol >= field.length)
+                    continue;
+
+                int gridNum = field[newRow][newCol];
+                int currentRisk = risk[newRow][newCol];
+
+                // not a better path
+                if (currentRisk <= risk[current.x][current.y] + gridNum)
+                    continue;
+
+                // not first to visit -> clear other visitors
+                if (currentRisk != Integer.MAX_VALUE) {
+                    Position adj = new Position(newRow, newCol, currentRisk);
+                    heapQueue.remove(adj);
                 }
+
+                // add as lowest risk level
+                risk[newRow][newCol] = risk[current.x][current.y] + gridNum;
+                heapQueue.add(new Position(newRow, newCol, risk[newRow][newCol]));
             }
-            g = parseInput(sb.toString());
         }
 
-        return puzzleOne(g);
+        return risk[risk.length - 1][risk.length - 1];
     }
 
-    private static Graph parseInput(String file) {
-        // this is the ugliest code I've ever written
-        String[] in = file.split("\r\n");
-        ArrayList<Vertex> vertices = new ArrayList<>(in.length * in.length);
-        Vertex c = new Vertex("V0", "e");
-        vertices.add(c);
-        start = c;
-        startValue = in[0].charAt(0) - '0';
-        for (int i = 1; i < in.length * in.length - 1; i++) {
-            vertices.add(new Vertex("V%d".formatted(i), "e"));
-        }
-        c = new Vertex("Vl", "e");
-        vertices.add(c);
-        end = c;
-        endValue = in[in.length - 1].charAt(in.length - 1) - '0';
+    private static int puzzleTwo(int[][] field) {
+        return puzzleOne(inflate(field));
+    }
 
-        ArrayList<Edge> edges = new ArrayList<>();
-        for (int i = 0; i < in.length; i++) {
-            for (int j = 0; j < in.length; j++) {
-                if (i != 0) edges.add(
-                        new Edge(
-                                "E%d%d-l".formatted(i, j),
-                                vertices.get(i * in.length + j),
-                                vertices.get((i - 1) * in.length + j),
-                                in[i].charAt(j) - '0')
-                );
+    private static int[][] parseInput(String input) {
+        String[] in = input.split("\r\n");
+        int[][] res = new int[in.length][in.length];
 
-                if (i != in.length - 1) edges.add(
-                        new Edge(
-                                "E%d%d-r".formatted(i, j),
-                                vertices.get(i * in.length + j),
-                                vertices.get((i + 1) * in.length + j),
-                                in[i].charAt(j) - '0')
-                );
-
-                if (j != 0) edges.add(
-                        new Edge(
-                                "E%d%d-u".formatted(i, j),
-                                vertices.get(i * in.length + j),
-                                vertices.get((i) * in.length + j - 1),
-                                in[i].charAt(j) - '0')
-                );
-
-                if (j != in.length - 1) edges.add(
-                        new Edge(
-                                "E%d%d-d".formatted(i, j),
-                                vertices.get(i * in.length + j),
-                                vertices.get((i) * in.length + j + 1),
-                                in[i].charAt(j) - '0')
-                );
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j < res.length; j++) {
+                res[i][j] = in[i].charAt(j) - '0';
             }
         }
 
-        return new Graph(vertices, edges);
+        return res;
+    }
+
+    private static int[][] inflate(int[][] input) {
+        int[][] big = new int[input.length * 5][input.length * 5];
+
+        // make input 5 times bigger
+        for (int i = 0; i < big.length; i++) {
+            for (int j = 0; j < big.length; j++) {
+                big[i][j] = (input[i % input.length][j % input.length]
+                        + i / input.length
+                        + j / input.length
+                        - 1) % 9 + 1;
+            }
+        }
+
+        return big;
     }
 
     public static void main(String[] args) throws IOException {
         String file = Files.readString(Path.of("input"));
 
-        Graph input = parseInput(file);
+        int[][] parsed = parseInput(file);
 
-        System.out.println(puzzleOne(input));
-        System.out.println(puzzleTwo(file));
+        System.out.println(puzzleOne(parsed));
+        System.out.println(puzzleTwo(parsed));
     }
 }
