@@ -19,3 +19,4 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 13 | [Transparent Origami](https://adventofcode.com/2021/day/13) | C# |
 | 14 | [Extended Polymerization](https://adventofcode.com/2021/day/14) | Scala |
 | 15 | [Chiton](https://adventofcode.com/2021/day/15) | Java |
+| 16 | [Packet Decoder](https://adventofcode.com/2021/day/16) | C++ |
