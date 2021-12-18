@@ -21,3 +21,4 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 15 | [Chiton](https://adventofcode.com/2021/day/15) | Java |
 | 16 | [Packet Decoder](https://adventofcode.com/2021/day/16) | C++ |
 | 17 | [Trick Shot](https://adventofcode.com/2021/day/17) | Python |
+| 18 | [Snailfish](https://adventofcode.com/2021/day/18) | Java |
