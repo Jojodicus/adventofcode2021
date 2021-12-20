@@ -22,3 +22,5 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 16 | [Packet Decoder](https://adventofcode.com/2021/day/16) | C++ |
 | 17 | [Trick Shot](https://adventofcode.com/2021/day/17) | Python |
 | 18 | [Snailfish](https://adventofcode.com/2021/day/18) | Java |
+| 19 | [Beacon Scanner](https://adventofcode.com/2021/day/19) | |
+| 20 | [Trench Map](https://adventofcode.com/2021/day/20) | Python |
