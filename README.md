@@ -24,3 +24,4 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 18 | [Snailfish](https://adventofcode.com/2021/day/18) | Java |
 | 19 | [Beacon Scanner](https://adventofcode.com/2021/day/19) | |
 | 20 | [Trench Map](https://adventofcode.com/2021/day/20) | Python |
+| 21 | [Dirac Dice](https://adventofcode.com/2021/day/21) | C++ |
