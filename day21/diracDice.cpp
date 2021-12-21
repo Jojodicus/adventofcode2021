@@ -6,40 +6,40 @@
 
 namespace
 {
-    struct positions
+    struct pair
     {
-        std::uint_fast8_t p1;
-        std::uint_fast8_t p2;
+        std::uint_fast32_t p1;
+        std::uint_fast32_t p2;
     };
-    typedef struct positions Positions;
+    typedef struct pair Positions;
+    typedef struct pair Scores;
+    typedef struct pair Wins;
 
-    std::uint_fast32_t puzzleOne(std::shared_ptr<Positions> p);
-    // std::uint_fast32_t puzzleTwo(std::shared_ptr<Positions> p);
+    std::uint_fast32_t puzzleOne(std::shared_ptr<Positions> startpos);
+    std::uint_fast32_t puzzleTwo(std::shared_ptr<Positions> startpos);
     std::shared_ptr<Positions> parseFile(std::string fileName);
 
-    std::uint_fast32_t puzzleOne(std::shared_ptr<Positions> p)
+    std::uint_fast32_t puzzleOne(std::shared_ptr<Positions> startpos)
     {
         // dice stats
         std::uint_fast16_t d100 = 1;
         std::uint_fast32_t rolls = 0;
 
         // positions
-        std::uint_fast8_t p1_pos = p->p1;
-        std::uint_fast8_t p2_pos = p->p2;
+        Positions pos = {startpos->p1, startpos->p2};
 
         // score
-        std::uint_fast16_t p1_score = 0;
-        std::uint_fast16_t p2_score = 0;
+        Scores score = {0, 0};
 
         // keep track of turn
         bool p1_turn = true;
 
         // current position/score
-        std::uint_fast8_t *c_pos = &p1_pos;
-        std::uint_fast16_t *c_score = &p1_score;
+        std::uint_fast32_t *c_pos = &pos.p1;
+        std::uint_fast32_t *c_score = &score.p1;
 
         // play
-        while (p1_score < 1000 && p2_score < 1000)
+        while (score.p1 < 1000 && score.p2 < 1000)
         {
             // roll 3 times
             for (int i = 0; i < 3; i++)
@@ -57,18 +57,23 @@ namespace
             p1_turn = !p1_turn;
             if (p1_turn)
             {
-                c_pos = &p1_pos;
-                c_score = &p1_score;
+                c_pos = &pos.p1;
+                c_score = &score.p1;
             }
             else
             {
-                c_pos = &p2_pos;
-                c_score = &p2_score;
+                c_pos = &pos.p2;
+                c_score = &score.p2;
             }
         }
 
         // return score of losing player * number of rolls
         return *c_score * rolls;
+    }
+
+    std::uint_fast32_t puzzleTwo(std::shared_ptr<Positions> startpos)
+    {
+        return 0;
     }
 
     std::shared_ptr<Positions> parseFile(std::string fileName)
