@@ -26,3 +26,6 @@ My solutions for the puzzles at https://adventofcode.com/ for 2021.
 | 20 | [Trench Map](https://adventofcode.com/2021/day/20) | Python |
 | 21 | [Dirac Dice](https://adventofcode.com/2021/day/21) | (p1) C++ |
 | 22 | [Reactor Robot](https://adventofcode.com/2021/day/22) | (p1) Python |
+| 23 | [Amphipod](https://adventofcode.com/2021/day/23) | |
+| 24 | [Arithmetic Logic Unit](https://adventofcode.com/2021/day/24) | (wip) C |
+| 25 | [Sea Cucumber](https://adventofcode.com/2021/day/25) | |
